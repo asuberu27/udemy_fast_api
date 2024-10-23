@@ -44,8 +44,8 @@ async def logout(request: Request, response: Response, csrf_protect: CsrfProtect
     return {"message": "Successfully logged-out"}
 
 @router.get('/api/user', response_model=UserInfo)
-def get_user_refresh_jwt(request: Request, response: Response):
-    new_token, subject = auth.verify_csrf_update_jwt(request)
+def get_user_refresh_jwt(request: Request, response: Response, csrf_protect: CsrfProtect = Depends()):
+    new_token, subject = auth.verify_csrf_update_jwt(request , csrf_protect, request.headers)
     response.set_cookie(
         key="access_token", value=f"Bearer {new_token}", httponly=True, samesite="none", secure=True)
     return {'email': subject}
