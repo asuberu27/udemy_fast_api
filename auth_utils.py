@@ -58,4 +58,4 @@ class AuthJwtCsrf():
         csrf_protect.validate_csrf(csrf_token)
         subject = self.verify_jwt(request)
         new_token = self.encode_jwt(subject)
-        return new_token
+        return new_token, subject
