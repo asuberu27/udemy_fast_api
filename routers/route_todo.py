@@ -41,7 +41,7 @@ async def get_single_todo(request: Request, response: Response, id: str):
 
 @router.put("/api/todo/{id}", response_model=Todo)
 async def update_todo(request: Request, response: Response, id: str, data:TodoBody, csrf_protect: CsrfProtect = Depends()):
-    new_token = auth.verify_csrf_update_jwt(
+    new_token, _ = auth.verify_csrf_update_jwt(
         request, csrf_protect, request.headers)
     todo = jsonable_encoder(data)
     res = await db_update_todo(id, todo)
