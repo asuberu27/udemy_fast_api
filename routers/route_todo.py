@@ -31,8 +31,8 @@ async def get_todos(request: Request):
 
 
 @router.get("/api/todo/{id}", response_model=Todo)
-async def get_single_todo(request: Request, response: Response, id: str):
-    new_token, _ = auth.verify_csrf_update_jwt(request)
+async def get_single_todo(request: Request, response: Response, id: str, csrf_protect: CsrfProtect = Depends()):
+    new_token, _ = auth.verify_csrf_update_jwt(request, csrf_protect, request.headers)
     res = await db_get_single_todo(id)
     response.set_cookie(key="access_token", value=f"Bearer {new_token}", httponly=True, samesite="none", secure=True)
     if res:
